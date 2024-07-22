@@ -1,0 +1,278 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #201c25;
+    color: white;
+}
+
+.content {
+    padding: 30px 0px 30px 0px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    grid-gap: 20px;
+    justify-content: center;
+}
+
+input, select, textarea {
+    outline: none;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    border: 1px solid #ddd;
+    background-color: #2f353b;
+    color: white;
+    border-radius: 4px;
+}
+
+textarea {
+    height: 150px;
+    padding-top: 10px;
+}
+
+.item_header {
+    grid-column: 1 / -1;
+    height: auto;
+    padding: 35px 0px 0px 0px;
+}
+
+.item_header h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.item_header_univers h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 40px;
+}
+
+.item_header_kaf h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 24px;
+}
+
+.main_table {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.main_table table {
+    font-size: 18px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.main_table td {
+    border: 1px solid white;
+}
+
+thead {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+tbody {
+    text-align: center;
+}
+
+tfoot {
+    text-align: center;
+}
+
+.main_table_item {
+    text-align: left;
+    padding-left: 10px;
+    font-style: italic;
+}
+
+.item_header_main {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.item_header_main h2 {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+p.contact {
+    padding: 20px 0px 10px 3px;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.in_radio input {
+    width: 14px;
+    height: 14px;
+    margin: 10px;
+}
+
+.blog-post {
+    background-color: #221e27;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.blog-post h3 {
+    margin-top: 0;
+    color: #d4d4d4;
+}
+
+.post-date {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.post-image {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.post-content {
+    line-height: 1.6;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination > * {
+    margin: 0 5px;
+    color: white;
+}
+
+form {
+    background-color: #221e27;
+    width: 100%;
+    padding: 20px 30px 30px 30px;
+    margin-top: 50px;
+    border: 2px solid white;
+    border-radius: 5px;
+}
+
+.in_btn {
+    margin-top: 30px;
+    display: flex;
+}
+
+.in_btn input {
+    text-transform: uppercase;
+    font-weight: bold;
+    width: auto;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.in_btn input[type="submit"] {
+    margin-left: 30px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.in_btn input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.cover {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.6;
+    z-index: 100;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: scroll;
+    padding: 20px;
+    z-index: 200;
+}
+
+.modal__content {
+    border-radius: 4px;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+    background-color: #2f353b;
+    z-index: 300;
+    padding: 50px 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal__content .btn {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.open-modal-btn {
+    cursor: pointer;
+}
+
+input.error,
+select.error,
+textarea.error {
+    border: 2px solid red;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding: 10px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    .blog-post {
+        padding: 15px;
+    }
+}

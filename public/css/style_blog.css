@@ -1,0 +1,149 @@
+/* Основные стили для страницы блога */
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1, h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Стили для формы добавления записи */
+form {
+    background-color: #221e27;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    margin: 0 auto;
+}
+
+form div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="file"] {
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+textarea {
+    height: 150px;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Стили для отображения записей блога */
+.blog-post {
+    background-color: #221e27;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 718px;
+}
+
+.blog-post h3 {
+    margin-top: 0;
+    color: #d4d4d4;
+}
+
+.post-date {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.post-author {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.post-image {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.post-content {
+    line-height: 1.6;
+}
+
+/* Стили для пагинации */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+.pagination a, .pagination span {
+    padding: 5px 10px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    color: white !important;
+    text-decoration: none;
+}
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Стили для сообщений об ошибках */
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 600px) {
+    .content {
+        padding: 10px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    .blog-post {
+        padding: 15px;
+    }
+}

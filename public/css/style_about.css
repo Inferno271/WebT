@@ -1,0 +1,84 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    background: #201c25;
+    color:white;
+}
+
+.content
+{
+    padding: 30px 0px 30px 0px;
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 360px); /* автоматически повторять отрисовку колонок */
+    grid-gap: 20px; /* отступы между колонками */
+    justify-content: center; /* отцентровать контент по центру */
+}
+
+.item
+{
+    height: 540px;
+    background: #3E3648;
+}
+
+.item img
+{
+    max-width: 740px;
+    max-height: 540px;
+}
+
+.item_big
+{
+    grid-column: 1 / -2; /* объединить две колонки в одну */
+    background-image: url(image\Layer 2.jpg);
+    padding: 48px;
+    display: grid;
+    align-content: end; /* все содержимое распологается в нижней части */
+}
+
+.item_text
+{
+    padding: 24px;
+}
+
+.item_date
+{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    margin-bottom: 16px;
+
+    color: #818181;
+}
+
+.item_heading
+{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    text-transform: capitalize;
+
+    color:white;
+}
+
+.item_heading_white
+{
+    color: white; 
+}
+
+@media (max-width: 1023px)
+{
+    body
+    {
+        padding: 0;
+    }
+}
