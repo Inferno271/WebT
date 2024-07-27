@@ -13,9 +13,10 @@
     <admin>
         <nav>
             <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Панель управления</a></li>
+                <li><a href="{{ route('admin.dashboard') }}">Главная</a></li>
                 <li><a href="{{ route('admin.blog_editor') }}">Редактор блога</a></li>
-                <li><a href="{{ route('admin.guestbook_upload') }}">Загрузка сообщений гостевой книги</a></li>
+                <li><a href="{{ route('admin.guestbook_upload') }}">Загрузка гостевой книги</a></li>
+                <li><a href="{{ route('admin.upload_csv') }}">Загрузка CSV</a></li>
             </ul>
         </nav>
     </admin>

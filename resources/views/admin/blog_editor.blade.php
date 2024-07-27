@@ -17,7 +17,7 @@
             <a href="{{ route('admin.upload_csv') }}" class="btn">Загрузить записи из CSV</a>
 
             <!-- Форма добавления записи блога -->
-            <form action="{{ route('blog_editor.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.blog_editor.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div>
                     <label for="title">Тема сообщения:</label>
@@ -51,7 +51,7 @@
                         <div class="post-content">
                             {{ $post->content }}
                         </div>
-                        <form action="{{ route('blog.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту запись?');">
+                        <form action="{{ route('admin.blog_editor.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту запись?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Удалить</button>

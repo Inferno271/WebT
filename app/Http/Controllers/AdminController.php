@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
+use App\Models\GuestbookEntry;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
-use App\Models\Validators\FormValidation;
 
 class AdminController extends Controller
 {
@@ -18,8 +17,47 @@ class AdminController extends Controller
 
     public function blogEditor()
     {
-        $posts = BlogPost::orderBy('created_at', 'desc')->paginate(config('blog.posts_per_page', 5));
+        $posts = BlogPost::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.blog_editor', compact('posts'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'author' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $post = new BlogPost();
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->author = $request->input('author');
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('blog_images', 'public');
+            $post->image = $imagePath;
+        }
+
+        $post->save();
+
+        return redirect()->route('admin.blog_editor')->with('success', 'Запись успешно добавлена');
+    }
+
+
+
+    public function destroy($id)
+    {
+        $post = BlogPost::findOrFail($id);
+    
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+    
+        $post->delete();
+    
+        return redirect()->route('admin.blog_editor')->with('success', 'Запись успешно удалена');
     }
 
     public function guestbookUpload()
@@ -27,80 +65,63 @@ class AdminController extends Controller
         return view('admin.guestbook_upload');
     }
 
-    public function showUploadForm()
-    {
-        return view('admin.upload_csv');
-    }
-
-    public function uploadCsv(Request $request)
+    public function uploadGuestbook(Request $request)
     {
         $request->validate([
-            'csv_file' => 'required|mimes:csv,txt',
+            'file' => 'required|file|mimes:txt,inc'
         ]);
 
-        Log::info('CSV файл успешно загружен');
+        $file = $request->file('file');
+        $content = file_get_contents($file->getRealPath());
+        $entries = explode("\n\n", $content);
 
-        $path = $request->file('csv_file')->getRealPath();
-        $file = fopen($path, 'r');
-
-        $header = fgetcsv($file, 0, ',');
-        Log::info('Заголовок файла CSV: ' . implode(',', $header));
-
-        $expectedHeader = ['title', 'content', 'author', 'created_at'];
-        if ($header !== $expectedHeader) {
-            Log::error('Файл не соответствует требуемому формату. Ожидалось: ' . implode(',', $expectedHeader) . '. Получено: ' . implode(',', $header));
-            return redirect()->route('admin.upload_csv')->with('error', 'Файл не соответствует требуемому формату');
-        }
-
-        $validator = new FormValidation();
-        $validator->setRule('title', 'isNotEmpty');
-        $validator->setRule('content', 'isNotEmpty');
-        $validator->setRule('author', 'isNotEmpty');
-        $validator->setRule('created_at', 'isNotEmpty');
-        $validator->setRule('created_at', 'isDate');
-
-        $pdo = DB::connection()->getPdo();
-        $pdo->beginTransaction();
-
-        $query = $pdo->prepare('INSERT INTO blog_posts (title, content, author, created_at) VALUES (:title, :content, :author, :created_at)');
-
-        $rowCount = 0;
-        while (($row = fgetcsv($file, 0, ',')) !== false) {
-            $data = [
-                'title' => $row[0],
-                'content' => $row[1],
-                'author' => $row[2],
-                'created_at' => \Carbon\Carbon::createFromFormat('d.m.Y H:i', $row[3])->format('Y-m-d H:i:s'),
-            ];
-
-            Log::info('Обработка строки: ' . json_encode($data));
-
-            $validator->validate($data);
-
-            if ($validator->getErrors()) {
-                Log::error('Валидация не удалась: ' . implode(', ', $validator->getErrors()));
-                $pdo->rollBack();
-                return redirect()->route('admin.upload_csv.form')->with('error', 'Файл содержит ошибки: ' . implode(', ', $validator->getErrors()));
-            }
-
-            try {
-                $result = $query->execute($data);
-                if ($result) {
-                    Log::info('Строка успешно вставлена: ' . json_encode($data));
-                    $rowCount++;
-                } else {
-                    Log::error('Не удалось вставить строку: ' . json_encode($data));
-                }
-            } catch (\Exception $e) {
-                Log::error('Ошибка при вставке строки: ' . $e->getMessage() . '. Данные: ' . json_encode($data));
-                $pdo->rollBack();
-                return redirect()->route('admin.upload_csv')->with('error', 'Ошибка при вставке записи: ' . $e->getMessage());
+        foreach ($entries as $entry) {
+            $lines = explode("\n", $entry);
+            if (count($lines) >= 3) {
+                GuestbookEntry::create([
+                    'name' => trim($lines[0]),
+                    'email' => trim($lines[1]),
+                    'message' => trim(implode("\n", array_slice($lines, 2))),
+                ]);
             }
         }
 
-        $pdo->commit();
-        Log::info('Транзакция успешно завершена. Добавлено записей: ' . $rowCount);
-
-        return redirect()->route('admin.upload_csv')->with('success', 'Записи успешно загружены. Добавлено: ' . $rowCount);
+        return redirect()->route('admin.guestbook_upload')->with('success', 'Сообщения успешно загружены');
     }
+
+
+    public function showUploadForm()
+{
+    return view('admin.upload_csv');
+}
+
+public function uploadCsv(Request $request)
+{
+    $request->validate([
+        'csv_file' => 'required|file|mimes:csv,txt',
+    ]);
+
+    $path = $request->file('csv_file')->getRealPath();
+    $file = fopen($path, 'r');
+
+    $header = fgetcsv($file, 0, ',');
+    $expectedHeader = ['title', 'content', 'author', 'created_at'];
+
+    if ($header !== $expectedHeader) {
+        return redirect()->route('admin.upload_csv')->with('error', 'Файл не соответствует требуемому формату');
+    }
+
+    while (($row = fgetcsv($file, 0, ',')) !== false) {
+        BlogPost::create([
+            'title' => $row[0],
+            'content' => $row[1],
+            'author' => $row[2],
+            'created_at' => \Carbon\Carbon::createFromFormat('d.m.Y H:i', $row[3]),
+        ]);
+    }
+
+    fclose($file);
+
+    return redirect()->route('admin.upload_csv')->with('success', 'Записи успешно загружены');
+}
 }

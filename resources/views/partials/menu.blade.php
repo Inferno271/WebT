@@ -11,8 +11,6 @@
       <li><a href="{{ url('/about') }}">Обо мне</a></li>
       <li><a href="{{ url('/test') }}">Тест</a></li>
       <li><a href="{{ url('/guestbook') }}">Гостевая книга</a></li>
-      <li><a href="{{ url('/upload') }}">Загрузка сообщений</a></li>
-      <li><a href="{{ url('/blog') }}">Редактор Блога</a></li>
       <li><a href="{{ url('/myblog') }}">Мой Блог</a></li>
     </ul>
   </nav>
