@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style_blog.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style_statistics.css') }}">
 </head>
 <body>
     <admin>
@@ -17,6 +18,7 @@
                 <li><a href="{{ route('admin.blog_editor') }}">Редактор блога</a></li>
                 <li><a href="{{ route('admin.guestbook_upload') }}">Загрузка гостевой книги</a></li>
                 <li><a href="{{ route('admin.upload_csv') }}">Загрузка CSV</a></li>
+                <li><a href="{{ route('admin.statistics') }}">Статистика посещений</a></li>
             </ul>
         </nav>
     </admin>

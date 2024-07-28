@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Visitor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
@@ -91,37 +92,45 @@ class AdminController extends Controller
 
 
     public function showUploadForm()
-{
-    return view('admin.upload_csv');
-}
-
-public function uploadCsv(Request $request)
-{
-    $request->validate([
-        'csv_file' => 'required|file|mimes:csv,txt',
-    ]);
-
-    $path = $request->file('csv_file')->getRealPath();
-    $file = fopen($path, 'r');
-
-    $header = fgetcsv($file, 0, ',');
-    $expectedHeader = ['title', 'content', 'author', 'created_at'];
-
-    if ($header !== $expectedHeader) {
-        return redirect()->route('admin.upload_csv')->with('error', 'Файл не соответствует требуемому формату');
+    {
+        return view('admin.upload_csv');
     }
 
-    while (($row = fgetcsv($file, 0, ',')) !== false) {
-        BlogPost::create([
-            'title' => $row[0],
-            'content' => $row[1],
-            'author' => $row[2],
-            'created_at' => \Carbon\Carbon::createFromFormat('d.m.Y H:i', $row[3]),
+    public function uploadCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
         ]);
+
+        $path = $request->file('csv_file')->getRealPath();
+        $file = fopen($path, 'r');
+
+        $header = fgetcsv($file, 0, ',');
+        $expectedHeader = ['title', 'content', 'author', 'created_at'];
+
+        if ($header !== $expectedHeader) {
+            return redirect()->route('admin.upload_csv')->with('error', 'Файл не соответствует требуемому формату');
+        }
+
+        while (($row = fgetcsv($file, 0, ',')) !== false) {
+            BlogPost::create([
+                'title' => $row[0],
+                'content' => $row[1],
+                'author' => $row[2],
+                'created_at' => \Carbon\Carbon::createFromFormat('d.m.Y H:i', $row[3]),
+            ]);
+        }
+
+        fclose($file);
+
+        return redirect()->route('admin.upload_csv')->with('success', 'Записи успешно загружены');
     }
 
-    fclose($file);
 
-    return redirect()->route('admin.upload_csv')->with('success', 'Записи успешно загружены');
-}
+    public function statistics()
+    {
+        $visitors = Visitor::orderBy('visit_time', 'desc')->paginate(20); // 20 записей на страницу
+        return view('admin.statistics', compact('visitors'));
+    }
+
 }
