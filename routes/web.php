@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UploadController;
@@ -26,13 +28,19 @@ Route::middleware([CollectStatistics::class])->group(function () {
     Route::get('/guestbook', [GuestBookController::class, 'index'])->name('guestbook.index');
     Route::get('/myblog', [MyBlogController::class, 'index'])->name('myblog.index');
     Route::get('/test-results', [TestController::class, 'showResults'])->name('test.results');
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 });
+
+
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
 
 // Маршруты, не требующие сбора статистики
 Route::post('/guestbook', [GuestBookController::class, 'store'])->name('guestbook.store');
 Route::post('/contacts', [ContactsController::class, 'submit'])->name('contacts.submit');
 Route::post('/test', [TestController::class, 'submit'])->name('test.submit');
-
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // Маршруты для админ-панели (без сбора статистики)
