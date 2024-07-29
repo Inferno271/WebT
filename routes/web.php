@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\GuestbookController;
 use App\Http\Controllers\MyBlogController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\CollectStatistics;
+use Illuminate\Support\Facades\Route;
 
 // Группа маршрутов для пользовательской части сайта с применением middleware для сбора статистики
 Route::middleware([CollectStatistics::class])->group(function () {
@@ -30,8 +33,16 @@ Route::post('/guestbook', [GuestBookController::class, 'store'])->name('guestboo
 Route::post('/contacts', [ContactsController::class, 'submit'])->name('contacts.submit');
 Route::post('/test', [TestController::class, 'submit'])->name('test.submit');
 
+
+
 // Маршруты для админ-панели (без сбора статистики)
 Route::prefix('admin')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+// Маршруты для админ-панели (без сбора статистики)
+Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/blog-editor', [AdminController::class, 'blogEditor'])->name('admin.blog_editor');
     Route::post('/blog-editor', [AdminController::class, 'store'])->name('admin.blog_editor.store');
@@ -41,4 +52,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/upload-csv', [AdminController::class, 'showUploadForm'])->name('admin.upload_csv');
     Route::post('/upload-csv', [AdminController::class, 'uploadCsv'])->name('admin.upload_csv.post');
     Route::get('/statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
+
 });
