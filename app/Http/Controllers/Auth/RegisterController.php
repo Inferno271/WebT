@@ -37,4 +37,12 @@ class RegisterController extends Controller
 
         return redirect()->route('home')->with('success', 'Registration successful!');
     }
+
+    public function checkUsername(Request $request)
+    {
+        $username = $request->getContent();
+        $exists = User::where('username', $username)->exists();
+        return $exists ? 'taken' : 'available';
+    }
+
 }

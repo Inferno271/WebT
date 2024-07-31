@@ -39,6 +39,7 @@ Route::middleware([CollectStatistics::class])->group(function () {
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
+Route::post('/check-username', [RegisterController::class, 'checkUsername']);
 Route::post('user/login', [UserLoginController::class, 'login']);
 Route::post('user/logout', [UserLoginController::class, 'logout'])->name('user.logout');
 
