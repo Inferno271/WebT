@@ -28,7 +28,9 @@ Route::middleware([CollectStatistics::class])->group(function () {
     Route::get('/test', [TestController::class, 'index'])->name('test');
     Route::get('/guestbook', [GuestBookController::class, 'index'])->name('guestbook.index');
     Route::get('/myblog', [MyBlogController::class, 'index'])->name('myblog.index');
-    Route::get('/test-results', [TestController::class, 'showResults'])->name('test.results');
+    Route::get('/test-results', [TestController::class, 'showResults'])
+    ->name('test.results')
+    ->middleware('auth');
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::get('user/login', [UserLoginController::class, 'showLoginForm'])->name('user.login');
 

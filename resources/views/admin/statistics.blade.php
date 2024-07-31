@@ -5,7 +5,7 @@
     <h1>Статистика посещений</h1>
 
     <div class="table-responsive">
-        <table class="statistics-table">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Дата и время</th>

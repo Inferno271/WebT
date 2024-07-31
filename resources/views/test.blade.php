@@ -255,10 +255,13 @@
     <p>Результат: {{ $result }}/3</p>
     @endif
 
-    <!-- Новая кнопка для просмотра результатов -->
+    @auth
     <div class="view-results-button">
         <a href="{{ route('test.results') }}" class="btn btn-primary">Просмотреть все результаты</a>
     </div>
+    @else
+        <p>Для просмотра результатов необходимо авторизоваться.</p>
+    @endauth
 </section>
   </main>
 

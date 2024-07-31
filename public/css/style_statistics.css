@@ -15,26 +15,26 @@
         overflow-x: auto;
     }
 
-    .statistics-table {
+    .table {
         width: 100%;
         border-collapse: collapse;
         background-color: #333333;
     }
 
-    .statistics-table th,
-    .statistics-table td {
+    .table th,
+    .table td {
         padding: 12px;
         text-align: left;
         border-bottom: 1px solid #e0e0e0;
     }
 
-    .statistics-table th {
+    .table th {
         background-color: #f1f3f5;
         font-weight: bold;
         color: #333;
     }
 
-    .statistics-table tr:hover {
+    .table tr:hover {
         background-color: #202020;
     }
 
