@@ -42,7 +42,7 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('/check-username', [RegisterController::class, 'checkUsername']);
 Route::post('user/login', [UserLoginController::class, 'login']);
 Route::post('user/logout', [UserLoginController::class, 'logout'])->name('user.logout');
-
+Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->middleware('auth');
 // Маршруты, не требующие сбора статистики
 Route::post('/guestbook', [GuestBookController::class, 'store'])->name('guestbook.store');
 Route::post('/contacts', [ContactsController::class, 'submit'])->name('contacts.submit');
