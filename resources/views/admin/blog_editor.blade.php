@@ -40,24 +40,45 @@
 
             <h2>Записи блога</h2>
             @if($posts->count() > 0)
-                @foreach($posts as $post)
-                    <article class="blog-post">
-                        <h3>{{ $post->title }}</h3>
-                        <p class="post-author">Автор: {{ $post->author }}</p>
-                        <p class="post-date">{{ $post->created_at->format('d.m.Y H:i') }}</p>
-                        @if($post->image)
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="Изображение к посту" class="post-image">
-                        @endif
-                        <div class="post-content">
-                            {{ $post->content }}
-                        </div>
-                        <form action="{{ route('admin.blog_editor.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту запись?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Удалить</button>
-                        </form>
-                    </article>
-                @endforeach
+            @foreach($posts as $post)
+    <article class="blog-post" id="post-{{ $post->id }}">
+        <h3>{{ $post->title }}</h3>
+        <p class="post-author">Автор: {{ $post->author }}</p>
+        <p class="post-date">{{ $post->created_at->format('d.m.Y H:i') }}</p>
+        @if($post->image)
+            <img src="{{ asset('storage/' . $post->image) }}" alt="Изображение к посту" class="post-image">
+        @endif
+        <div class="post-content">
+            {{ $post->content }}
+        </div>
+        <button class="btn btn-edit" onclick="showEditForm({{ $post->id }})">Изменить</button>
+        <form action="{{ route('admin.blog_editor.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту запись?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Удалить</button>
+        </form>
+        
+        <!-- Форма редактирования (скрыта по умолчанию) -->
+        <div id="edit-form-{{ $post->id }}" class="edit-form" style="display: none;">
+            <form target="hidden-iframe" onsubmit="updatePost(event, {{ $post->id }})">
+                @csrf
+                <input type="hidden" name="id" value="{{ $post->id }}">
+                <div>
+                    <label for="edit-title-{{ $post->id }}">Тема сообщения:</label>
+                    <input type="text" id="edit-title-{{ $post->id }}" name="title" required value="{{ $post->title }}">
+                </div>
+                <div>
+                    <label for="edit-content-{{ $post->id }}">Текст сообщения:</label>
+                    <textarea id="edit-content-{{ $post->id }}" name="content" required>{{ $post->content }}</textarea>
+                </div>
+                <button type="submit">Сохранить изменения</button>
+            </form>
+        </div>
+    </article>
+@endforeach
+
+<!-- Скрытый iframe для отправки формы -->
+<iframe name="hidden-iframe" style="display:none;"></iframe>
 
                 @if ($posts->lastPage() > 1)
                     <div class="pagination">
@@ -87,4 +108,34 @@
                 <p>Пока нет записей в блоге.</p>
             @endif
         </section>
+
+        <script>
+function showEditForm(postId) {
+    document.getElementById(`edit-form-${postId}`).style.display = 'block';
+}
+
+function updatePost(event, postId) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(`{{ route('admin.blog_editor.update', '') }}/${postId}`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const post = document.getElementById(`post-${postId}`);
+            post.querySelector('h3').textContent = data.post.title;
+            post.querySelector('.post-content').textContent = data.post.content;
+            document.getElementById(`edit-form-${postId}`).style.display = 'none';
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
     </main>

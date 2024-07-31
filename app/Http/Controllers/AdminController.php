@@ -46,7 +46,20 @@ class AdminController extends Controller
         return redirect()->route('admin.blog_editor')->with('success', 'Запись успешно добавлена');
     }
 
-
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+    
+        $post = BlogPost::findOrFail($id);
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+    
+        return response()->json(['success' => true, 'post' => $post]);
+    }
 
     public function destroy($id)
     {

@@ -49,7 +49,7 @@ Route::post('/contacts', [ContactsController::class, 'submit'])->name('contacts.
 Route::post('/test', [TestController::class, 'submit'])->name('test.submit');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-
+Route::post('/admin/blog-editor/{id}', [AdminController::class, 'update'])->name('admin.blog_editor.update');
 
 // Маршруты для админ-панели (без сбора статистики)
 Route::prefix('admin')->group(function () {
@@ -69,4 +69,5 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     Route::post('/upload-csv', [AdminController::class, 'uploadCsv'])->name('admin.upload_csv.post');
     Route::get('/statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
 
+    
 });

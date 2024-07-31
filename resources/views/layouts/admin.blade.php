@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style_blog.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style_admin.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style_statistics.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <admin>
