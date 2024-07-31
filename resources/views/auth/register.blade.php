@@ -2,6 +2,11 @@
 <html>
 <head>
     <title>Регистрация пользователя</title>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style_test.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style_blog.css') }}">
+
 </head>
 <body>
     <h1>Регистрация</h1>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\UserLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Middleware\AdminAuthMiddleware;
@@ -29,11 +30,15 @@ Route::middleware([CollectStatistics::class])->group(function () {
     Route::get('/myblog', [MyBlogController::class, 'index'])->name('myblog.index');
     Route::get('/test-results', [TestController::class, 'showResults'])->name('test.results');
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::get('user/login', [UserLoginController::class, 'showLoginForm'])->name('user.login');
+
 });
 
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
+Route::post('user/login', [UserLoginController::class, 'login']);
+Route::post('user/logout', [UserLoginController::class, 'logout'])->name('user.logout');
 
 // Маршруты, не требующие сбора статистики
 Route::post('/guestbook', [GuestBookController::class, 'store'])->name('guestbook.store');
